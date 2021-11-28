@@ -10,3 +10,5 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     # For Linux
     xhost local:root && docker-compose run -e DISPLAY=$DISPLAY fuse-gui /app/code/start.sh
 fi
+
+docker-compose down

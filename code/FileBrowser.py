@@ -1,7 +1,8 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 import tkinter as tk
 import shutil
+import time
 import re
 import os
 
@@ -13,7 +14,7 @@ class FileBrowser():
         self.icons = []
         self.file_view_frame = tk.Frame(self.root_window)
         self.favorites = None
-        self.sort_mode = 'alpha'
+        self.sort_mode = 'az'
         # colors and whatnot
         self.width = 600
         self.height = 350
@@ -136,6 +137,12 @@ class FileBrowser():
                              ))
         save_btn.pack(anchor='e', side=tk.RIGHT, padx=5)
 
+        entry.bind("<KeyRelease-Return>", lambda s: self.rename_file(
+            popup,
+            path,
+            pwd + '/' + entry.get()
+        ))
+
     def init_folder_dialog(self, e):
         """Opens a dialog window that prompts the user for a dir name.
 
@@ -172,6 +179,11 @@ class FileBrowser():
                              ))
         save_btn.pack(anchor='e', side=tk.RIGHT, padx=5)
 
+        entry.bind("<KeyRelease-Return>", lambda s: self.create_folder(
+            '/' + entry.get(),
+            popup,
+        ))
+
     def init_info_dialog(self, path, reading=False, writing=False):
         """Multipurpose dialog window. Handles displaying the contents
         of a standard file, showing metadata for files and dirs, or
@@ -186,7 +198,7 @@ class FileBrowser():
         """
         popup = tk.Toplevel(self.root_window, bg=self.offwhite)
         popup.title('File info')
-        popup.geometry('300x150')
+        popup.geometry('325x175')
 
         if reading or writing:
             # Print the text content to window and bail
@@ -267,6 +279,18 @@ class FileBrowser():
                             width=100, anchor='w'
                             )
         filetype.pack(pady=5, padx=15)
+
+        # minus 6 hours to get to CDT
+        timestamp = os.path.getmtime(path) - 21600
+        t = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(timestamp))
+        # m = datetime.fromtimestamp(timestamp, tz=(timezone.utc - 6))
+        modified = tk.Label(popup, fg=self.background,
+                            bg=self.offwhite, text=(
+                                'Last modified: ' + str(t)),
+                            wraplength=270, justify=tk.LEFT,
+                            width=100, anchor='w'
+                            )
+        modified.pack(pady=5, padx=15)
 
     def init_favorites(self):
         """Builds the favorites sidebar widget that holds links to various
@@ -411,9 +435,9 @@ class FileBrowser():
 
         sort_menu = tk.Menu(menu, tearoff=0, cursor='hand2')
         sort_menu.add_command(label='A-Z',
-                command=(lambda: self.set_sort_mode('az')))
+                              command=(lambda: self.set_sort_mode('az')))
         sort_menu.add_command(label='Z-A',
-                command=(lambda: self.set_sort_mode('za')))
+                              command=(lambda: self.set_sort_mode('za')))
         menu.add_cascade(label='Sort by', menu=sort_menu)
 
         if not self.is_favorite(pwd):
