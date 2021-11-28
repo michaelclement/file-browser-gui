@@ -13,6 +13,7 @@ class FileBrowser():
         self.icons = []
         self.file_view_frame = tk.Frame(self.root_window)
         self.favorites = None
+        self.sort_mode = 'alpha'
         # colors and whatnot
         self.width = 600
         self.height = 350
@@ -267,18 +268,6 @@ class FileBrowser():
                             )
         filetype.pack(pady=5, padx=15)
 
-    def write_file(self, path, content, popup):
-        """Write arbitrary content to an arbitrary file.
-
-        @param path: the absolute path of the file to write
-        @param content: the content to put into the target file
-        @param popup: the dialog window that called this func
-        """
-        with open(path, 'w') as inf:
-            inf.write(content)
-
-        popup.destroy()
-
     def init_favorites(self):
         """Builds the favorites sidebar widget that holds links to various
         file locations.
@@ -318,6 +307,22 @@ class FileBrowser():
 
         return fd_frame
 
+    def set_sort_mode(self, mode):
+        self.sort_mode = mode
+        self.redraw_window()
+
+    def write_file(self, path, content, popup):
+        """Write arbitrary content to an arbitrary file.
+
+        @param path: the absolute path of the file to write
+        @param content: the content to put into the target file
+        @param popup: the dialog window that called this func
+        """
+        with open(path, 'w') as inf:
+            inf.write(content)
+
+        popup.destroy()
+
     def rename_file(self, popup, old_path, new_path):
         """Handles renaming a file/dir and associated cleanup.
 
@@ -341,6 +346,12 @@ class FileBrowser():
                 self.add_favorite(new_entry)
 
         self.redraw_window()
+
+    def sort_files(self, files):
+        if self.sort_mode == 'az':
+            return sorted(files)
+        else:
+            return reversed(sorted(files))
 
     def is_favorite(self, path):
         try:
@@ -397,6 +408,13 @@ class FileBrowser():
 
         menu.add_command(label='Information',
                          command=(lambda: self.init_info_dialog(pwd)))
+
+        sort_menu = tk.Menu(menu, tearoff=0, cursor='hand2')
+        sort_menu.add_command(label='A-Z',
+                command=(lambda: self.set_sort_mode('az')))
+        sort_menu.add_command(label='Z-A',
+                command=(lambda: self.set_sort_mode('za')))
+        menu.add_cascade(label='Sort by', menu=sort_menu)
 
         if not self.is_favorite(pwd):
             menu.add_command(label='Add to Favorites',
@@ -560,7 +578,7 @@ class FileBrowser():
             path = self.visited_paths[self.v_idx]
 
         try:
-            fuse_files = os.listdir(path)
+            fuse_files = self.sort_files(os.listdir(path))
         except(FileNotFoundError):
             return
 
