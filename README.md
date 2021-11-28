@@ -7,13 +7,18 @@ userspace (or just a regular filesystem). Launching this application
 will mount a FUSE, and then start a GUI that allows the user to use
 the file system. 
 
+Theoretically it can run on any platform that is compatible with
+Docker (though I've not tested it on Windows).
+
 It has the most basic of functionality. Through the GUI one can:
 - create directories and files
 - copy items from location to location
 - delete items
 - set directories as favorites for easy navigation
 - view file metadata (limited)
-- view and edit file contents (as long as its text), and generally browse.
+- view and edit file contents (as long as it's text)
+
+... and generally browse the filetree.
 
 ### Disclaimer
 The FUSE in use is a not-so-modified example from
@@ -24,7 +29,8 @@ My primary contribution is the GUI that sits atop the FUSE.
 ## Setup
 
 - Install Docker and Docker-Compose
-*Extra step for macOS*
+
+*Extra step for macOS:*
 - Install XQuartz: `brew cask install xquartz` *additional info about why XQuartz is being used [here](https://sourabhbajaj.com/blog/2017/02/07/gui-applications-docker-mac/)*
 
 ## Usage 
