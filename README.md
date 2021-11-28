@@ -24,7 +24,7 @@ It has the most basic of functionality. Through the GUI one can:
 The FUSE in use is a not-so-modified example from
 [stavros.io](https://www.stavros.io/posts/python-fuse-filesystem/).
 
-My primary contribution is the GUI that sits atop the FUSE.
+My contribution is the GUI that sits atop the FUSE (`FileBrowser.py`).
 
 ## Setup
 
