@@ -28,7 +28,7 @@ My primary contribution is the GUI that sits atop the FUSE.
 
 ## Setup
 
-- Install Docker and Docker-Compose
+- Install Docker and Docker-Compose ([Ubuntu instructions](https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script))
 
 *Extra step for macOS:*
 - Install XQuartz: `brew cask install xquartz` *additional info about why XQuartz is being used [here](https://sourabhbajaj.com/blog/2017/02/07/gui-applications-docker-mac/)*
