@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+    fuse-gui:
+        build: . 
+        volumes:
+            - /private/tmp/.X11-unix:/tmp/.X11-unix:rw
+            - ./code:/app/code/
+            - ./myfiles:/app/myfiles/
+            - ./mymnt:/app/mymnt/
+        cap_add:
+            - SYS_ADMIN
+        privileged: true
+        security_opt:
+            - apparmor:unconfined
