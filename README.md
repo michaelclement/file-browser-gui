@@ -21,8 +21,8 @@ It has the most basic of functionality. Through the GUI one can:
 ... and generally browse the filetree.
 
 ### Disclaimer
-The FUSE in use is a not-so-modified example from
-[stavros.io](https://www.stavros.io/posts/python-fuse-filesystem/).
+The FUSE in use is a not-so-modified example 
+[example](https://www.stavros.io/posts/python-fuse-filesystem/).
 
 My contribution is the GUI that sits atop the FUSE (`FileBrowser.py`).
 
